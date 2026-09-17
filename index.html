@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Status Permohonan BSN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf6ee; --panel:#ffffff; --panel2:#f0ece1; --border:#00A1B1;
+    --text:#1a1a1a; --muted:#6b6355; --accent:#00A1B1; --accent-dark:#008895;
+    --accent2:#0d7a52; --danger:#c0392b; --warnbg:#fdf0e8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Nunito',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;}
+  .topbar{background:var(--bg);padding:16px 20px;display:flex;align-items:center;gap:12px;}
+  .logo-img{height:36px;width:auto;border-radius:6px;}
+  .topbar-title{font-weight:800;font-size:1rem;}
+  .topbar-sub{color:var(--muted);font-size:.78rem;}
+  .btn-logout{margin-left:auto;background:none;border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;}
+
+  .wrap{max-width:960px;margin:0 auto;padding:20px;}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:28px 24px;box-shadow:0 2px 14px rgba(0,0,0,.05);}
+  .login-wrap{max-width:420px;margin:60px auto;padding:0 20px;}
+  .eyebrow{color:var(--accent);font-weight:700;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;}
+  h1{font-size:1.3rem;margin:0 0 8px;color:var(--accent-dark);}
+  p.help{color:var(--muted);font-size:.88rem;line-height:1.5;margin:0 0 18px;}
+  input[type=password], input[type=text]{width:100%;padding:12px 14px;font-size:1rem;border:1.5px solid var(--border);border-radius:10px;background:#fff;color:var(--text);font-family:inherit;}
+  input:focus{outline:none;border-color:var(--accent-dark);}
+  button{cursor:pointer;border:none;border-radius:10px;font-weight:700;font-size:.95rem;padding:13px;font-family:inherit;}
+  .btn-primary{width:100%;background:var(--accent);color:#fff;margin-top:14px;}
+  .btn-primary:hover{background:var(--accent-dark);}
+  .btn-primary:disabled{background:#cfcabf;cursor:not-allowed;}
+  .warn-box{background:var(--warnbg);border:1px solid #eccdb4;border-radius:10px;padding:10px 14px;font-size:.82rem;color:#8a4a1f;margin-top:14px;}
+
+  .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .toolbar .count{color:var(--muted);font-size:.85rem;}
+  .btn-refresh{margin-left:auto;background:var(--panel2);color:var(--text);border:1px solid var(--border);padding:9px 16px;font-size:.82rem;}
+  .btn-refresh:hover{background:#e5ded0;}
+
+  table{width:100%;border-collapse:collapse;font-size:.85rem;}
+  thead th{text-align:left;color:var(--muted);font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;padding:8px 10px;border-bottom:2px solid var(--border);}
+  tbody td{padding:12px 10px;border-bottom:1px solid var(--panel2);vertical-align:top;}
+  tbody tr:hover{background:#fbfaf6;}
+  .name-cell{font-weight:800;}
+  .sub-line{color:var(--muted);font-size:.76rem;margin-top:3px;line-height:1.5;}
+  .badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em;margin-left:6px;}
+  .badge-prepass{background:#e3f5f3;color:var(--accent-dark);}
+  .badge-prefail{background:var(--warnbg);color:#8a4a1f;}
+
+  .status-picker{display:flex;flex-wrap:wrap;gap:5px;max-width:220px;}
+  .status-btn{padding:6px 9px;border-radius:7px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-size:.72rem;font-weight:700;cursor:pointer;}
+  .status-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .status-btn.active.st-gagal{background:var(--danger);border-color:var(--danger);}
+  .status-btn.active.st-lulus,.status-btn.active.st-berjaya{background:var(--accent2);border-color:var(--accent2);}
+  .status-btn.active.st-proses{background:#c98a1f;border-color:#c98a1f;}
+
+  .empty-state{text-align:center;color:var(--muted);padding:40px 20px;font-size:.9rem;}
+  [hidden]{display:none!important;}
+  .table-scroll{overflow-x:auto;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <img src="bsn-logo.svg" alt="BSN" class="logo-img">
+  <div>
+    <div class="topbar-title">Status Permohonan</div>
+    <div class="topbar-sub">Nota Dalaman — BSN Pinjaman Peribadi</div>
+  </div>
+  <button type="button" class="btn-logout" id="btnLogout" hidden onclick="logout()">Log Keluar</button>
+</div>
+
+<div class="login-wrap" id="loginScreen">
+  <div class="card">
+    <div class="eyebrow">Akses Terhad</div>
+    <h1>Log Masuk</h1>
+    <p class="help">Laman ini untuk kegunaan dalaman sahaja. Masukkan kod rahsia untuk lihat senarai permohonan.</p>
+    <input type="password" id="passwordInput" placeholder="Kod rahsia" autocomplete="off">
+    <button type="button" class="btn-primary" id="btnLogin" onclick="login()">Log Masuk</button>
+    <div id="loginWarning"></div>
+  </div>
+</div>
+
+<div class="wrap" id="dashScreen" hidden>
+  <div class="toolbar">
+    <span class="count" id="rowCount"></span>
+    <button type="button" class="btn-refresh" onclick="loadRows()">Muat Semula</button>
+  </div>
+  <div class="card">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Produk BSN</th>
+            <th>Status Pekerjaan</th>
+            <th>Tarikh Mohon</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="rowsBody"></tbody>
+      </table>
+    </div>
+    <div class="empty-state" id="emptyState" hidden>Tiada permohonan direkodkan lagi.</div>
+  </div>
+</div>
+
+<script>
+// TODO: replace with the real Web App URL deployed from
+// google-apps-script/applications-log.gs in the BSNPersonalLoan repo.
+const APPS_SCRIPT_URL = 'REPLACE_WITH_DEPLOYED_WEB_APP_URL';
+
+const SESSION_KEY = 'bsn_status_pwd';
+const STATUS_OPTIONS = [
+  { value: 'Mohon', cls: 'st-mohon' },
+  { value: 'Proses', cls: 'st-proses' },
+  { value: 'Gagal', cls: 'st-gagal' },
+  { value: 'Lulus', cls: 'st-lulus' },
+  { value: 'Berjaya', cls: 'st-berjaya' },
+];
+
+let rows = [];
+
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+async function callApi(params){
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.startsWith('REPLACE_WITH_')){
+    throw new Error('Apps Script URL belum ditetapkan (lihat TODO dalam index.html).');
+  }
+  const url = `${APPS_SCRIPT_URL}?${new URLSearchParams(params).toString()}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  if (!data.ok) throw new Error(data.error || 'Ralat tidak diketahui.');
+  return data;
+}
+
+async function login(){
+  const password = document.getElementById('passwordInput').value;
+  const warnBox = document.getElementById('loginWarning');
+  const btn = document.getElementById('btnLogin');
+  warnBox.innerHTML = '';
+  if (!password){
+    warnBox.innerHTML = '<div class="warn-box">Sila masukkan kod rahsia.</div>';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Menyemak...';
+  try {
+    const data = await callApi({ password });
+    sessionStorage.setItem(SESSION_KEY, password);
+    rows = data.rows || [];
+    showDashboard();
+  } catch (e){
+    warnBox.innerHTML = `<div class="warn-box">${escapeHtml(e.message)}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Log Masuk';
+  }
+}
+
+function logout(){
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('dashScreen').hidden = true;
+  document.getElementById('btnLogout').hidden = true;
+  document.getElementById('loginScreen').hidden = false;
+  document.getElementById('passwordInput').value = '';
+}
+
+function showDashboard(){
+  document.getElementById('loginScreen').hidden = true;
+  document.getElementById('dashScreen').hidden = false;
+  document.getElementById('btnLogout').hidden = false;
+  renderRows();
+}
+
+async function loadRows(){
+  const password = sessionStorage.getItem(SESSION_KEY);
+  if (!password) return logout();
+  try {
+    const data = await callApi({ password });
+    rows = data.rows || [];
+    renderRows();
+  } catch (e){
+    alert(e.message);
+  }
+}
+
+function renderRows(){
+  const tbody = document.getElementById('rowsBody');
+  document.getElementById('rowCount').textContent = `${rows.length} permohonan`;
+  document.getElementById('emptyState').hidden = rows.length > 0;
+  tbody.innerHTML = rows.map(r => {
+    const dsrBadge = r.dsrStatus
+      ? `<span class="badge ${r.dsrStatus === 'PrePass' ? 'badge-prepass' : 'badge-prefail'}">${escapeHtml(r.dsrStatus)}</span>`
+      : '';
+    const subLine = [
+      r.telefon ? `Tel: ${escapeHtml(r.telefon)}` : '',
+      r.emel ? `Emel: ${escapeHtml(r.emel)}` : '',
+      r.penyatuanHutang ? `Penyatuan Hutang: ${escapeHtml(r.penyatuanHutang)}` : '',
+    ].filter(Boolean).join(' · ');
+    const statusButtons = STATUS_OPTIONS.map(opt =>
+      `<button type="button" class="status-btn ${opt.cls} ${r.status === opt.value ? 'active' : ''}" onclick="updateStatus('${encodeURIComponent(r.id)}','${opt.value}')">${opt.value}</button>`
+    ).join('');
+    return `
+      <tr>
+        <td><span class="name-cell">${escapeHtml(r.nama)}</span>${dsrBadge}${subLine ? `<div class="sub-line">${subLine}</div>` : ''}</td>
+        <td>${escapeHtml(r.produk)}</td>
+        <td>${escapeHtml(r.sektor)}</td>
+        <td>${escapeHtml(r.tarikhMohon)}</td>
+        <td><div class="status-picker">${statusButtons}</div></td>
+      </tr>`;
+  }).join('');
+}
+
+async function updateStatus(idEncoded, status){
+  const password = sessionStorage.getItem(SESSION_KEY);
+  if (!password) return logout();
+  const id = decodeURIComponent(idEncoded);
+  const row = rows.find(r => r.id === id);
+  if (row) row.status = status; // optimistic update
+  renderRows();
+  try {
+    await callApi({ password, action: 'updateStatus', id, status });
+  } catch (e){
+    alert('Gagal kemaskini status: ' + e.message);
+    loadRows(); // resync on failure
+  }
+}
+
+(function init(){
+  const saved = sessionStorage.getItem(SESSION_KEY);
+  if (!saved) return;
+  callApi({ password: saved }).then(data => {
+    rows = data.rows || [];
+    showDashboard();
+  }).catch(() => { sessionStorage.removeItem(SESSION_KEY); });
+})();
+
+document.getElementById('passwordInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') login();
+});
+</script>
+</body>
+</html>
