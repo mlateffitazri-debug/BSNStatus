@@ -7,90 +7,176 @@
 <title>Status Permohonan BSN</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#faf6ee; --panel:#ffffff; --panel2:#f0ece1; --border:#00A1B1;
-    --text:#1a1a1a; --muted:#6b6355; --accent:#00A1B1; --accent-dark:#008895;
-    --accent2:#0d7a52; --danger:#c0392b; --warnbg:#fdf0e8;
+    --bg:#f3f4f6; --panel:#ffffff; --border:#e3e5e9; --border-strong:#d3d6dc;
+    --text:#14161a; --text2:#3f434c; --muted:#767c88; --muted2:#9ba0ab;
+    --accent:#0f6e63; --accent-soft:#e4f3f0;
+    --navy:#12151c;
+    --danger:#c0392b; --danger-soft:#fbe9e7;
+    --warn:#b5730f; --warn-soft:#fdf0dc;
+    --ok:#1a7d4e; --ok-soft:#e3f5eb;
+    --info:#2563a8; --info-soft:#e6f0fa;
+    --radius:10px;
+    --shadow:0 1px 2px rgba(20,22,26,.04), 0 1px 8px rgba(20,22,26,.04);
   }
   *{box-sizing:border-box;}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:'Nunito',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;}
-  .topbar{background:var(--bg);padding:16px 20px;display:flex;align-items:center;gap:12px;}
-  .logo-img{height:36px;width:auto;border-radius:6px;}
-  .topbar-title{font-weight:800;font-size:1rem;}
-  .topbar-sub{color:var(--muted);font-size:.78rem;}
-  .btn-logout{margin-left:auto;background:none;border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;}
+  html,body{margin:0;height:100%;}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    font-size:14px;line-height:1.45;
+  }
+  ::selection{background:var(--accent-soft);}
 
-  .wrap{max-width:960px;margin:0 auto;padding:20px;}
-  .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:28px 24px;box-shadow:0 2px 14px rgba(0,0,0,.05);}
-  .login-wrap{max-width:420px;margin:60px auto;padding:0 20px;}
-  .eyebrow{color:var(--accent);font-weight:700;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;}
-  h1{font-size:1.3rem;margin:0 0 8px;color:var(--accent-dark);}
-  p.help{color:var(--muted);font-size:.88rem;line-height:1.5;margin:0 0 18px;}
-  input[type=password], input[type=text]{width:100%;padding:12px 14px;font-size:1rem;border:1.5px solid var(--border);border-radius:10px;background:#fff;color:var(--text);font-family:inherit;}
-  input:focus{outline:none;border-color:var(--accent-dark);}
-  button{cursor:pointer;border:none;border-radius:10px;font-weight:700;font-size:.95rem;padding:13px;font-family:inherit;}
-  .btn-primary{width:100%;background:var(--accent);color:#fff;margin-top:14px;}
-  .btn-primary:hover{background:var(--accent-dark);}
-  .btn-primary:disabled{background:#cfcabf;cursor:not-allowed;}
-  .warn-box{background:var(--warnbg);border:1px solid #eccdb4;border-radius:10px;padding:10px 14px;font-size:.82rem;color:#8a4a1f;margin-top:14px;}
+  /* ---- Topbar ---- */
+  .topbar{background:var(--navy);color:#fff;padding:0 20px;height:56px;display:flex;align-items:center;gap:12px;}
+  .topbar .logo-img{height:26px;width:auto;border-radius:6px;}
+  .topbar .app-name{font-weight:700;font-size:.92rem;letter-spacing:-.01em;}
+  .topbar .app-sub{color:#9aa1b0;font-size:.72rem;margin-left:10px;padding-left:10px;border-left:1px solid #2a2e38;}
+  .btn-logout{margin-left:auto;background:transparent;border:1px solid #3a3f4c;color:#cfd3db;padding:7px 13px;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;}
+  .btn-logout:hover{background:#1c202a;color:#fff;}
 
-  .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-  .toolbar .count{color:var(--muted);font-size:.85rem;}
-  .btn-refresh{margin-left:auto;background:var(--panel2);color:var(--text);border:1px solid var(--border);padding:9px 16px;font-size:.82rem;}
-  .btn-refresh:hover{background:#e5ded0;}
+  /* ---- Login ---- */
+  .login-shell{min-height:calc(100vh - 56px);display:flex;align-items:center;justify-content:center;padding:20px;}
+  .login-card{width:100%;max-width:360px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:30px 28px;}
+  .login-eyebrow{color:var(--muted);font-weight:600;font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;}
+  .login-card h1{font-size:1.15rem;margin:0 0 6px;font-weight:700;letter-spacing:-.01em;}
+  .login-card p{color:var(--muted);font-size:.82rem;line-height:1.55;margin:0 0 20px;}
+  label.field-label{display:block;font-size:.76rem;font-weight:600;color:var(--text2);margin-bottom:6px;}
+  input[type=password], input[type=text], input[type=search]{
+    width:100%;padding:10px 12px;font-size:.88rem;border:1px solid var(--border-strong);border-radius:8px;
+    background:#fff;color:var(--text);font-family:inherit;
+  }
+  input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+  button{cursor:pointer;border:none;border-radius:8px;font-weight:600;font-size:.85rem;font-family:inherit;}
+  .btn-primary{width:100%;background:var(--navy);color:#fff;padding:11px;margin-top:16px;}
+  .btn-primary:hover{background:#22262f;}
+  .btn-primary:disabled{background:#c7cad0;cursor:not-allowed;}
+  .warn-box{background:var(--danger-soft);border:1px solid #f3c8c2;border-radius:8px;padding:9px 12px;font-size:.8rem;color:var(--danger);margin-top:14px;}
 
-  table{width:100%;border-collapse:collapse;font-size:.85rem;}
-  thead th{text-align:left;color:var(--muted);font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;padding:8px 10px;border-bottom:2px solid var(--border);}
-  tbody td{padding:12px 10px;border-bottom:1px solid var(--panel2);vertical-align:top;}
-  tbody tr:hover{background:#fbfaf6;}
-  .name-cell{font-weight:800;}
-  .sub-line{color:var(--muted);font-size:.76rem;margin-top:3px;line-height:1.5;}
-  .badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em;margin-left:6px;}
-  .badge-prepass{background:#e3f5f3;color:var(--accent-dark);}
-  .badge-prefail{background:var(--warnbg);color:#8a4a1f;}
+  /* ---- Dashboard shell ---- */
+  .shell{max-width:1180px;margin:0 auto;padding:24px 20px 60px;}
+  .page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px;}
+  .page-head h1{font-size:1.2rem;font-weight:700;letter-spacing:-.01em;margin:0 0 3px;}
+  .page-head .sub{color:var(--muted);font-size:.8rem;}
+  .btn-refresh{background:var(--panel);color:var(--text2);border:1px solid var(--border-strong);padding:8px 14px;font-size:.8rem;display:inline-flex;align-items:center;gap:6px;}
+  .btn-refresh:hover{background:#f8f9fa;border-color:var(--muted2);}
 
-  .status-picker{display:flex;flex-wrap:wrap;gap:5px;max-width:220px;}
-  .status-btn{padding:6px 9px;border-radius:7px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-size:.72rem;font-weight:700;cursor:pointer;}
-  .status-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
-  .status-btn.active.st-gagal{background:var(--danger);border-color:var(--danger);}
-  .status-btn.active.st-lulus,.status-btn.active.st-berjaya{background:var(--accent2);border-color:var(--accent2);}
-  .status-btn.active.st-proses{background:#c98a1f;border-color:#c98a1f;}
+  .stat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px;}
+  @media (max-width:860px){.stat-grid{grid-template-columns:repeat(3,1fr);}}
+  @media (max-width:520px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
+  .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;}
+  .stat-card .n{font-size:1.35rem;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
+  .stat-card .l{color:var(--muted);font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .stat-card.st-total .n{color:var(--text);}
+  .stat-card.st-mohon .n{color:var(--info);}
+  .stat-card.st-proses .n{color:var(--warn);}
+  .stat-card.st-lulus .n,.stat-card.st-berjaya .n{color:var(--ok);}
+  .stat-card.st-gagal .n{color:var(--danger);}
 
-  .empty-state{text-align:center;color:var(--muted);padding:40px 20px;font-size:.9rem;}
-  [hidden]{display:none!important;}
+  .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .search-wrap{position:relative;flex:1;max-width:280px;}
+  .search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--muted2);pointer-events:none;}
+  .search-wrap input{padding-left:32px;}
+  select.filter-select{padding:9px 12px;font-size:.82rem;border:1px solid var(--border-strong);border-radius:8px;background:#fff;color:var(--text2);font-family:inherit;}
+  .toolbar .count{color:var(--muted);font-size:.8rem;margin-left:auto;}
+
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
   .table-scroll{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:.83rem;min-width:680px;}
+  thead th{
+    text-align:left;color:var(--muted);font-weight:600;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;
+    padding:11px 16px;background:#fafbfc;border-bottom:1px solid var(--border);position:sticky;top:0;
+  }
+  tbody td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--text2);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#fafbfc;}
+  .name-cell{font-weight:700;color:var(--text);}
+  .meta-line{color:var(--muted2);font-size:.72rem;margin-top:2px;}
+  .date-cell{font-variant-numeric:tabular-nums;color:var(--text2);}
+
+  .pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:.68rem;font-weight:700;letter-spacing:.01em;}
+  .pill-prepass{background:var(--ok-soft);color:var(--ok);}
+  .pill-prefail{background:var(--warn-soft);color:var(--warn);}
+
+  select.status-select{
+    padding:6px 26px 6px 10px;font-size:.76rem;font-weight:700;border-radius:20px;border:1px solid transparent;
+    font-family:inherit;cursor:pointer;appearance:none;
+    background-repeat:no-repeat;background-position:right 8px center;background-size:10px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23767c88' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
+  select.status-select:focus{outline:none;box-shadow:0 0 0 3px var(--accent-soft);}
+  .st-Mohon{background:var(--info-soft);color:var(--info);}
+  .st-Proses{background:var(--warn-soft);color:var(--warn);}
+  .st-Gagal{background:var(--danger-soft);color:var(--danger);}
+  .st-Lulus,.st-Berjaya{background:var(--ok-soft);color:var(--ok);}
+
+  .empty-state{text-align:center;color:var(--muted);padding:48px 20px;font-size:.85rem;}
+  .empty-state svg{width:36px;height:36px;color:var(--muted2);margin-bottom:10px;}
+  [hidden]{display:none!important;}
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <img src="bsn-logo.svg" alt="BSN" class="logo-img">
-  <div>
-    <div class="topbar-title">Status Permohonan</div>
-    <div class="topbar-sub">Nota Dalaman — BSN Pinjaman Peribadi</div>
-  </div>
+  <span class="app-name">BSN Applications</span>
+  <span class="app-sub">Pinjaman Peribadi — Nota Dalaman</span>
   <button type="button" class="btn-logout" id="btnLogout" hidden onclick="logout()">Log Keluar</button>
 </div>
 
-<div class="login-wrap" id="loginScreen">
-  <div class="card">
-    <div class="eyebrow">Akses Terhad</div>
-    <h1>Log Masuk</h1>
-    <p class="help">Laman ini untuk kegunaan dalaman sahaja. Masukkan kod rahsia untuk lihat senarai permohonan.</p>
-    <input type="password" id="passwordInput" placeholder="Kod rahsia" autocomplete="off">
+<div class="login-shell" id="loginScreen">
+  <div class="login-card">
+    <div class="login-eyebrow">Akses Terhad</div>
+    <h1>Log Masuk Sistem</h1>
+    <p>Panel dalaman untuk jejak status permohonan Pinjaman Peribadi. Masukkan kod akses untuk teruskan.</p>
+    <label class="field-label">Kod Akses</label>
+    <input type="password" id="passwordInput" placeholder="••••••••" autocomplete="off">
     <button type="button" class="btn-primary" id="btnLogin" onclick="login()">Log Masuk</button>
     <div id="loginWarning"></div>
   </div>
 </div>
 
-<div class="wrap" id="dashScreen" hidden>
-  <div class="toolbar">
-    <span class="count" id="rowCount"></span>
-    <button type="button" class="btn-refresh" onclick="loadRows()">Muat Semula</button>
+<div class="shell" id="dashScreen" hidden>
+  <div class="page-head">
+    <div>
+      <h1>Permohonan</h1>
+      <div class="sub">Disusun mengikut tarikh mohon terkini</div>
+    </div>
+    <button type="button" class="btn-refresh" onclick="loadRows()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+      Muat Semula
+    </button>
   </div>
-  <div class="card">
+
+  <div class="stat-grid">
+    <div class="stat-card st-total"><div class="n" id="statTotal">0</div><div class="l">Jumlah</div></div>
+    <div class="stat-card st-mohon"><div class="n" id="statMohon">0</div><div class="l">Mohon</div></div>
+    <div class="stat-card st-proses"><div class="n" id="statProses">0</div><div class="l">Proses</div></div>
+    <div class="stat-card st-lulus"><div class="n" id="statLulus">0</div><div class="l">Lulus</div></div>
+    <div class="stat-card st-berjaya"><div class="n" id="statBerjaya">0</div><div class="l">Berjaya</div></div>
+    <div class="stat-card st-gagal"><div class="n" id="statGagal">0</div><div class="l">Gagal</div></div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="search" id="searchInput" placeholder="Cari nama..." oninput="renderRows()">
+    </div>
+    <select class="filter-select" id="statusFilter" onchange="renderRows()">
+      <option value="">Semua Status</option>
+      <option value="Mohon">Mohon</option>
+      <option value="Proses">Proses</option>
+      <option value="Gagal">Gagal</option>
+      <option value="Lulus">Lulus</option>
+      <option value="Berjaya">Berjaya</option>
+    </select>
+    <span class="count" id="rowCount"></span>
+  </div>
+
+  <div class="panel">
     <div class="table-scroll">
       <table>
         <thead>
@@ -105,7 +191,10 @@
         <tbody id="rowsBody"></tbody>
       </table>
     </div>
-    <div class="empty-state" id="emptyState" hidden>Tiada permohonan direkodkan lagi.</div>
+    <div class="empty-state" id="emptyState" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5"/></svg>
+      <div>Tiada permohonan sepadan.</div>
+    </div>
   </div>
 </div>
 
@@ -115,13 +204,7 @@
 const APPS_SCRIPT_URL = 'REPLACE_WITH_DEPLOYED_WEB_APP_URL';
 
 const SESSION_KEY = 'bsn_status_pwd';
-const STATUS_OPTIONS = [
-  { value: 'Mohon', cls: 'st-mohon' },
-  { value: 'Proses', cls: 'st-proses' },
-  { value: 'Gagal', cls: 'st-gagal' },
-  { value: 'Lulus', cls: 'st-lulus' },
-  { value: 'Berjaya', cls: 'st-berjaya' },
-];
+const STATUS_VALUES = ['Mohon', 'Proses', 'Gagal', 'Lulus', 'Berjaya'];
 
 let rows = [];
 
@@ -146,7 +229,7 @@ async function login(){
   const btn = document.getElementById('btnLogin');
   warnBox.innerHTML = '';
   if (!password){
-    warnBox.innerHTML = '<div class="warn-box">Sila masukkan kod rahsia.</div>';
+    warnBox.innerHTML = '<div class="warn-box">Sila masukkan kod akses.</div>';
     return;
   }
   btn.disabled = true;
@@ -191,45 +274,70 @@ async function loadRows(){
   }
 }
 
+function renderStats(){
+  const counts = { Mohon:0, Proses:0, Gagal:0, Lulus:0, Berjaya:0 };
+  rows.forEach(r => { if (counts[r.status] !== undefined) counts[r.status]++; });
+  document.getElementById('statTotal').textContent = rows.length;
+  document.getElementById('statMohon').textContent = counts.Mohon;
+  document.getElementById('statProses').textContent = counts.Proses;
+  document.getElementById('statLulus').textContent = counts.Lulus;
+  document.getElementById('statBerjaya').textContent = counts.Berjaya;
+  document.getElementById('statGagal').textContent = counts.Gagal;
+}
+
 function renderRows(){
+  renderStats();
+  const search = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+  const statusFilter = document.getElementById('statusFilter').value;
+  const filtered = rows.filter(r =>
+    (!search || (r.nama || '').toLowerCase().includes(search)) &&
+    (!statusFilter || r.status === statusFilter)
+  );
+
   const tbody = document.getElementById('rowsBody');
-  document.getElementById('rowCount').textContent = `${rows.length} permohonan`;
-  document.getElementById('emptyState').hidden = rows.length > 0;
-  tbody.innerHTML = rows.map(r => {
-    const dsrBadge = r.dsrStatus
-      ? `<span class="badge ${r.dsrStatus === 'PrePass' ? 'badge-prepass' : 'badge-prefail'}">${escapeHtml(r.dsrStatus)}</span>`
+  document.getElementById('rowCount').textContent = `${filtered.length} daripada ${rows.length}`;
+  document.getElementById('emptyState').hidden = filtered.length > 0;
+
+  tbody.innerHTML = filtered.map(r => {
+    const dsrPill = r.dsrStatus
+      ? `<span class="pill ${r.dsrStatus === 'PrePass' ? 'pill-prepass' : 'pill-prefail'}">${escapeHtml(r.dsrStatus)}</span>`
       : '';
-    const subLine = [
-      r.telefon ? `Tel: ${escapeHtml(r.telefon)}` : '',
-      r.emel ? `Emel: ${escapeHtml(r.emel)}` : '',
-      r.penyatuanHutang ? `Penyatuan Hutang: ${escapeHtml(r.penyatuanHutang)}` : '',
-    ].filter(Boolean).join(' · ');
-    const statusButtons = STATUS_OPTIONS.map(opt =>
-      `<button type="button" class="status-btn ${opt.cls} ${r.status === opt.value ? 'active' : ''}" onclick="updateStatus('${encodeURIComponent(r.id)}','${opt.value}')">${opt.value}</button>`
-    ).join('');
+    const metaLine = r.penyatuanHutang ? `Penyatuan Hutang: ${escapeHtml(r.penyatuanHutang)}` : '';
+    const options = STATUS_VALUES.map(v => `<option value="${v}" ${r.status === v ? 'selected' : ''}>${v}</option>`).join('');
     return `
       <tr>
-        <td><span class="name-cell">${escapeHtml(r.nama)}</span>${dsrBadge}${subLine ? `<div class="sub-line">${subLine}</div>` : ''}</td>
+        <td>
+          <div class="name-cell">${escapeHtml(r.nama)} ${dsrPill}</div>
+          ${metaLine ? `<div class="meta-line">${metaLine}</div>` : ''}
+        </td>
         <td>${escapeHtml(r.produk)}</td>
         <td>${escapeHtml(r.sektor)}</td>
-        <td>${escapeHtml(r.tarikhMohon)}</td>
-        <td><div class="status-picker">${statusButtons}</div></td>
+        <td class="date-cell">${escapeHtml(r.tarikhMohon)}</td>
+        <td>
+          <select class="status-select st-${r.status || 'Mohon'}" onchange="updateStatus('${encodeURIComponent(r.id)}', this)">
+            ${options}
+          </select>
+        </td>
       </tr>`;
   }).join('');
 }
 
-async function updateStatus(idEncoded, status){
+async function updateStatus(idEncoded, selectEl){
   const password = sessionStorage.getItem(SESSION_KEY);
   if (!password) return logout();
   const id = decodeURIComponent(idEncoded);
+  const newStatus = selectEl.value;
   const row = rows.find(r => r.id === id);
-  if (row) row.status = status; // optimistic update
-  renderRows();
+  const prevStatus = row ? row.status : null;
+  if (row) row.status = newStatus; // optimistic update
+  selectEl.className = `status-select st-${newStatus}`;
+  renderStats();
   try {
-    await callApi({ password, action: 'updateStatus', id, status });
+    await callApi({ password, action: 'updateStatus', id, status: newStatus });
   } catch (e){
     alert('Gagal kemaskini status: ' + e.message);
-    loadRows(); // resync on failure
+    if (row) row.status = prevStatus;
+    renderRows();
   }
 }
 
